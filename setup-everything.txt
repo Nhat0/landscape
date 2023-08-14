@@ -1,0 +1,57 @@
+
+
+import * as THREE from './node_modules/three/src/Three';
+import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls';
+import * as dat from './node_modules/lil-gui/dist/lil-gui.esm';
+import { GLTFLoader } from './node_modules/three/examples/jsm/loaders/GLTFLoader';
+
+
+
+
+const scene = new THREE.Scene();
+
+
+const canvas = document.createElement('canvas');
+
+document.body.appendChild(canvas);
+
+
+
+
+const gui = new dat.GUI();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(4, 5, 4);
+scene.add(camera);
+
+
+const controls = new OrbitControls(camera, canvas);
+controls.target.y = 3.5;
+controls.enableDamping = true;
+
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight
+}
+
+
+const renderer = new THREE.WebGLRenderer({
+  canvas
+})
+renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+
+window.addEventListener('resize', () => {
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+})
+
+
+
+renderer.render(scene, camera);
+document.body.appendChild(renderer.domElement);
